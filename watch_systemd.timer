@@ -1,0 +1,10 @@
+[Unit]
+Description=Check Systemd for failed services
+
+[Timer]
+OnBootSec=30sec
+OnUnitActiveSec=10min
+Unit=watch_systemd.service
+
+[Install]
+WantedBy=timers.target

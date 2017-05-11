@@ -1,0 +1,8 @@
+[Unit]
+Description=Check Systemd for failed Services
+
+[Service]
+Type=oneshot
+ExecStart=/usr/local/bin/systemd-watcher.py
+Restart=on-failure
+RestartSec=10
