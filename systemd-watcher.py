@@ -81,9 +81,12 @@ def parse_systemd():
 
     for service in failed_services:
         with open(failed_log, 'r+') as log:
-            if service not in log:
-                set_parameters(service)
-                log.write("{}\n".format(service))
+            lines = log.readline()
+            for line in lines:
+                if service in line:
+                    set_parameters(service)
+                    log.write("{}\n".format(service))
+                    break
 
     if not os.path.exists(logfile):
         open(logfile, 'x').close
