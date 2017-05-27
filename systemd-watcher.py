@@ -62,6 +62,7 @@ def parse_systemd():
     sysd = subp.Popen(["systemctl --failed"], stdout=subp.PIPE, shell=True)
     (out, err) = sysd.communicate()
     now = strftime("%c")
+    found_service = False
 
     text = (out.decode("utf-8")).split('\n')
 
@@ -79,14 +80,16 @@ def parse_systemd():
     if not failed_services:
         open(failed_log, 'w').close
 
-    for service in failed_services:
-        with open(failed_log, 'r+') as log:
-            lines = log.readline()
+    with open(failed_log, 'r+') as log:
+        lines = log.readline()
+        for service in failed_services:
             for line in lines:
                 if service in line:
-                    set_parameters(service)
-                    log.write("{}\n".format(service))
+                    found_service = True
                     break
+            if not found_service:
+                set_parameters(service)
+                log.write("{}\n".format(service))
 
     if not os.path.exists(logfile):
         open(logfile, 'x').close
