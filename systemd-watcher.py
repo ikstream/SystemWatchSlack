@@ -90,6 +90,6 @@ def parse_systemd():
 
     for service in failed_services:
         with open(logfile, 'a+') as log:
-            log.write("{}: {}".format(now, service))
+            log.write("{}: {}\n".format(now, service))
 
 parse_systemd()
