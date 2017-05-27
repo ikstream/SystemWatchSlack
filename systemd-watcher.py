@@ -68,9 +68,6 @@ def parse_systemd():
     if not os.path.exists(failed_log):
         open(failed_log, 'x').close
 
-    if not os.path.exists(logfile):
-        open(logfile, 'x').close
-
     for line in text:
         elements = re.findall(r"[\w'.]+", line)
         for word in elements:
@@ -87,6 +84,9 @@ def parse_systemd():
             if service not in log:
                 set_parameters(service)
                 log.write("{}\n".format(service))
+
+    if not os.path.exists(logfile):
+        open(logfile, 'x').close
 
     for service in failed_services:
         with open(logfile, 'a+') as fail_log:
