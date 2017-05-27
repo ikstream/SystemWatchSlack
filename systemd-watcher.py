@@ -26,11 +26,11 @@
 #
 ################################################################################
 
-from json import dumps
+import json
 import  os.path
 import re
 import requests
-from  socket import gethostname
+import socket 
 import subprocess as subp
 from time import strftime
 
