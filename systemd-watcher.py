@@ -27,7 +27,7 @@
 ################################################################################
 
 import json
-import  os.path
+import os.path
 import re
 import requests
 import socket 
@@ -89,7 +89,7 @@ def parse_systemd():
                 log.write("{}\n".format(service))
 
     for service in failed_services:
-        with open(logfile, 'a+') as log:
-            log.write("{}: {}\n".format(now, service))
+        with open(logfile, 'a+') as fail_log:
+            fail_log.write("{}: {}\n".format(now, service))
 
 parse_systemd()
