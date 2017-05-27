@@ -87,7 +87,10 @@ def parse_systemd():
                 if service in line:
                     found_service = True
                     break
-            if not found_service:
+
+            if found_service:
+                continue
+            else:
                 set_parameters(service)
                 log.write("{}\n".format(service))
 
