@@ -26,13 +26,15 @@
 #
 ################################################################################
 
-import json
-import os.path
+from json import dumps
+import  os.path
 import re
 import requests
-import socket
+from  socket import gethostname
 import subprocess as subp
+from time import strftime
 
+failed_log = '/tmp/failed_services.log'
 logfile = '/var/log/failed_services.log'
 
 class team:
@@ -59,8 +61,12 @@ def parse_systemd():
     failed_services = []
     sysd = subp.Popen(["systemctl --failed"], stdout=subp.PIPE, shell=True)
     (out, err) = sysd.communicate()
+    now = strftime("%c")
 
     text = (out.decode("utf-8")).split('\n')
+
+    if not os.path.exists(failed_log):
+        open(failed_log, 'x').close
 
     if not os.path.exists(logfile):
         open(logfile, 'x').close
@@ -74,12 +80,16 @@ def parse_systemd():
 
     #remove everything from log, if no failed services are found
     if not failed_services:
-        open(logfile, 'w').close
+        open(failed_log, 'w').close
 
     for service in failed_services:
-        with open(logfile, 'r+') as log:
+        with open(failed_log, 'r+') as log:
             if service not in log:
                 set_parameters(service)
                 log.write("{}\n".format(service))
+
+    for service in failed_services:
+        with open(logfile, 'a+') as log:
+            log.write("{}: {}".format(now, service))
 
 parse_systemd()
