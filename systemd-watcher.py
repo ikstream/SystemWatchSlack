@@ -56,6 +56,8 @@ def send_message(msg):
     msg_data = {"channel": Team.channel, "username": Team.username, "text": msg,
                 "icon_emoji": Team.emoji}
     alert = requests.post(Team.webhook, data=json.dumps(msg_data))
+    if alert:
+        print("webrequest returned: {}".format(alert))
 
 
 def parse_systemd():
@@ -63,6 +65,9 @@ def parse_systemd():
     failed_services = []
     sysd = subp.Popen(["systemctl --failed"], stdout=subp.PIPE, shell=True)
     (out, err) = sysd.communicate()
+    if err:
+        print("Failed to communicate with systemd: {}".format(err))
+
     now = strftime("%c")
     found_service = False
 
